@@ -1,20 +1,12 @@
-export interface AddProductDto {
-    name: string;
-    description?: string;
-    price: number;
-    expiry_date: Date;
-    status: string; // Or use ProductStatus if you have predefined statuses
-    category_id: number;
-    supplier_id: number;
-  }
-  
-  // DTO for updating an existing product
-  export interface UpdateProductDto {
-    name?: string;
-    description?: string;
-    price?: number;
-    expiry_date?: Date;
-    status?: string; // Or use ProductStatus
-    category_id?: number;
-    supplier_id?: number;
-  }
+export type AddProductDto = {
+  name: string;
+  description?: string;
+  price: number;
+  expiry_date: Date;
+  status: string;
+  category_id: number;
+  supplier_id: number;
+
+};
+
+export type UpdateProductDto = Partial<AddProductDto>;

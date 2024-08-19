@@ -27,7 +27,6 @@ model SuperAdmin {
 enum UserRole {
   ADMINGUDANG
   APOTEKER
-
 }
 
 model User {
@@ -39,26 +38,27 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  inventories Inventory[]
+  inventories  Inventory[]
   transactions Transaction[]
+
   @@map("users")
 }
 
 model Product {
-  id           Int         @id @default(autoincrement())
-  name         String      @unique
-  description  String?
-  price        Decimal
-  expiry_date  DateTime
-  status       String
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  expiry_date DateTime
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  category_id  Int
-  Category     Category    @relation(fields: [category_id], references: [id])
+  category_id Int
+  Category    Category @relation(fields: [category_id], references: [id])
 
-  supplier_id  Int
-  Supplier     Supplier    @relation(fields: [supplier_id], references: [id])
+  supplier_id Int
+  Supplier    Supplier @relation(fields: [supplier_id], references: [id])
 
   inventories  Inventory[]
   transactions Transaction[]
@@ -66,71 +66,72 @@ model Product {
 
   @@map("products")
 }
+
 model Category {
-  id          Int        @id @default(autoincrement())
-  name        String     @unique
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
   description String?
   status      String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  products    Product[]
+  products Product[]
 
   @@map("categories")
 }
 
 model Supplier {
-  id          Int        @id @default(autoincrement())
-  name        String
-  contact     String
-  address     String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String
+  contact   String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  products    Product[]
+  products Product[]
 
   @@map("suppliers")
 }
 
 model Transaction {
-  id              Int       @id @default(autoincrement())
-  product_id      Int
-  quantity        Int
-  total_price     Decimal
+  id               Int      @id @default(autoincrement())
+  product_id       Int
+  quantity         Int
+  total_price      Decimal
   transaction_date DateTime @default(now())
-  user_id         Int
-  User            User      @relation(fields: [user_id], references: [id])
+  user_id          Int
+  User             User     @relation(fields: [user_id], references: [id])
 
-  Product         Product   @relation(fields: [product_id], references: [id])
+  Product Product @relation(fields: [product_id], references: [id])
 
   @@map("transactions")
 }
 
 model Inventory {
-  id          Int       @id @default(autoincrement())
-  product_id  Int
-  quantity    Int
-  location    String
+  id           Int      @id @default(autoincrement())
+  product_id   Int
+  quantity     Int
+  location     String
   warehouse_id Int
-  note        String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  created_by  Int
+  note         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  created_by   Int
 
-  Product     Product   @relation(fields: [product_id], references: [id])
-  Warehouse   Warehouse @relation(fields: [warehouse_id], references: [id])
-  User        User      @relation(fields: [created_by], references: [id])
+  Product   Product   @relation(fields: [product_id], references: [id])
+  Warehouse Warehouse @relation(fields: [warehouse_id], references: [id])
+  User      User      @relation(fields: [created_by], references: [id])
 
   @@map("inventories")
 }
- 
+
 model Warehouse {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
-  status      Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   inventories Inventory[]
 
@@ -138,25 +139,24 @@ model Warehouse {
 }
 
 model ProductImage {
-  id          Int       @id @default(autoincrement())
-  image       String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  product_id  Int
-  Product     Product   @relation(fields: [product_id], references: [id])
+  product_id Int
+  Product    Product @relation(fields: [product_id], references: [id])
 
   @@map("product_images")
 }
 
 model Role {
-  id        String   @id @default(uuid())
-  name      String   @unique
+  id          String   @id @default(uuid())
+  name        String   @unique
   description String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  status      Boolean  @default(true)
 
   @@map("roles")
 }
-

@@ -6,7 +6,9 @@ import { authRoutes } from "./routes/auth";
 import { usersRoutes } from "./routes/users";
 import type { UserRole } from "./dtos/users";
 import { swaggerConfig } from "./config/swagger/swaggerConfig";
-import { authorize } from "./middleware/authorize";
+import { productsRoutes } from "./routes/product";
+import { categoriesRoutes } from "./routes/categories";
+import { suppliersRoutes } from "./routes/suppliers";
 
 interface TokenPayload {
   sub: string;
@@ -19,7 +21,10 @@ const app = new Elysia();
 // Apply middleware and routes
 app
   .use(swagger(swaggerConfig))
-  .use(usersRoutes)
+  .use(usersRoutes)  
+  .use(productsRoutes)
+  .use(categoriesRoutes)
+  .use(suppliersRoutes)
   .use(authRoutes)
   .guard(async (context: { headers: any; request: any; }) => {
     const { headers, request } = context;

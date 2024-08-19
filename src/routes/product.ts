@@ -1,80 +1,78 @@
-import { Elysia, t } from "elysia";
-import { ProductsHandler } from "../handler/products";
+import { Elysia, t } from 'elysia';
+import { ProductsHandler } from '../handler/products';
+import type { AddProductDto, UpdateProductDto } from '../dtos/products';
 
+export const productsRoutes = (app: Elysia) => (
+  // Get all products
+  app.get('/api/products', async () => {
+    const result = await ProductsHandler.getAll();
+    return result.success
+      ? { status: 200, body: result.data }
+      : { status: 500, body: { message: result.message, error: result.error } };
+  }),
 
-export const ProductRoutes = (app: Elysia) => {
-    app.get("/products", async () => {
-        const response = await ProductsHandler.getAll();
-        return new Response(JSON.stringify(response), {
-            status: response.success ? 200 : 500,
-            headers: { "Content-Type": "application/json" },
-        });
-    });
+  // Get product by ID
+  app.get('/api/products/:id', async ({ params }) => {
+    const productId = parseInt(params.id);
+    const result = await ProductsHandler.getById(productId);
 
-    app.get("/products/:id", async (req) => {
-        const { id } = req.params;
-        const response = await ProductsHandler.getById(parseInt(id));
-        return new Response(JSON.stringify(response), {
-            status: response.success ? 200 : 404,
-            headers: { "Content-Type": "application/json" },
-        });
-    });
+    return result.success
+      ? { status: 200, body: result.data }
+      : result.message === 'Product not found'
+      ? { status: 404, body: { message: result.message } }
+      : { status: 500, body: { message: result.message, error: result.error } };
+  }),
 
-    app.post(
-        "/products",
-        async (req) => {
-        const { name, description, price, expiry_date, status, category_id, supplier_id } = req.body;
-        if (!name) {
-            throw new Error("Name is required");
-        }
-        if (!price) {
-            throw new Error("Price is required");
-        }   
-        if (!expiry_date) {
-            throw new Error("Expiry date is required");
-        }
-        if (!status) {
-            throw new Error("Status is required");
-        }
-        if (!category_id) {
-            throw new Error("Category is required");
-        }
-        if (!supplier_id) {
-            throw new Error("Supplier is required");
-        }
-            const response = await ProductsHandler.create({
-                name,
-                description,
-                price,
-                expiry_date,
-                status,
-                category_id,
-                supplier_id,
-            });
-            return new Response(JSON.stringify(response), {
-                status: response.success ? 201 : 400,
-                headers: { "Content-Type": "application/json" },
-            });
-        },
-        {
-            body: t.Object({
-                name: t.String(),
-                description: t.String().optional(),
-                price: t.Number(),
-                expiry_date: t.Date(),
-                status: t.String(),
-                category_id: t.Number(),
-                supplier_id: t.Number(),
-            }),
-        }
-    ),
+  // Create a new product
+  app.post('/api/products', async ({ body }) => {
+    const productData = body as AddProductDto;
 
-    app.delete("/products/:id", async (req) => {
-        const { id } = req.params;
-        const response = await ProductsHandler.deleteById(parseInt(id));
-        return new Response(JSON.stringify(response), {
-            status: response.success ? 204 : 400,
-            headers: { "Content-Type": "application/json" },
-        });
+    const result = await ProductsHandler.create(productData);
+    return result.success
+      ? { status: 201, body: { message: result.message } }
+      : { status: 500, body: { message: result.message, error: result.error } };
+  }, {
+    body: t.Object({
+      name: t.String(),
+      description: t.String(),
+      price: t.Number(),
+      expiry_date: t.Date(),
+      status: t.String(),
+      category_id: t.Number(),
+      supplier_id: t.Number(),
     })
-};
+  }),
+
+  // Update a product by ID
+  app.put('/api/products/:id', async ({ params, body }) => {
+    const productId = parseInt(params.id);
+    const updateData = body as UpdateProductDto;
+
+    const result = await ProductsHandler.updateById(productId, updateData);
+    return result.success
+      ? { status: 200, body: { message: result.message } }
+      : result.message === 'Product not found'
+      ? { status: 404, body: { message: result.message } }
+      : { status: 500, body: { message: result.message, error: result.error } };
+  }, {
+    body: t.Object({
+      name: t.Optional(t.String()),
+      description: t.Optional(t.String()),
+      price: t.Optional(t.Number()),
+      expiry_date: t.Optional(t.Date()),
+      status: t.Optional(t.String()),
+      category_id: t.Optional(t.Number()),
+      supplier_id: t.Optional(t.Number()),
+    })
+  }),
+
+  // Delete a product by ID
+  app.delete('/api/products/:id', async ({ params }) => {
+    const productId = parseInt(params.id);
+
+    const result = await ProductsHandler.deleteById(productId);
+    return result.success
+      ? { status: 200, body: { message: result.message } }
+      : { status: 500, body: { message: result.message, error: result.error } };
+  })
+);
