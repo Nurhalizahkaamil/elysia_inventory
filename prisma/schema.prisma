@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,7 +14,7 @@ datasource db {
 }
 
 model SuperAdmin {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @db.Uuid
   username  String   @unique @db.VarChar(255)
   password  String   @db.VarChar(255)
   email     String   @db.VarChar(255)
@@ -27,7 +30,7 @@ enum UserRole {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @db.Uuid
   name      String
   email     String   @unique
   password  String
@@ -42,7 +45,7 @@ model User {
 }
 
 model Product {
-  id          String   @id @default(uuid())
+  id          Int      @id @default(autoincrement())
   name        String   @unique
   description String?
   price       Decimal  @db.Decimal(10, 2)
@@ -51,10 +54,10 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  category_id String
+  category_id Int
   Category    Category @relation(fields: [category_id], references: [id])
 
-  supplier_id String
+  supplier_id Int
   Supplier    Supplier @relation(fields: [supplier_id], references: [id])
 
   inventories  Inventory[]
@@ -65,7 +68,7 @@ model Product {
 }
 
 model Category {
-  id          String   @id @default(uuid())
+  id          Int      @id @default(autoincrement())
   name        String   @unique
   description String?
   status      String
@@ -78,7 +81,7 @@ model Category {
 }
 
 model Supplier {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   name      String
   contact   String
   address   String
@@ -91,12 +94,12 @@ model Supplier {
 }
 
 model Transaction {
-  id               String   @id @default(uuid())
-  product_id       String
+  id               Int      @id @default(autoincrement())
+  product_id       Int
   quantity         Int
   total_price      Decimal
   transaction_date DateTime @default(now())
-  user_id          String
+  user_id          String   @db.Uuid
   User             User     @relation(fields: [user_id], references: [id])
 
   Product Product @relation(fields: [product_id], references: [id])
@@ -105,15 +108,15 @@ model Transaction {
 }
 
 model Inventory {
-  id           String   @id @default(uuid())
-  product_id   String
+  id           Int      @id @default(autoincrement())
+  product_id   Int
   quantity     Int
   location     String
-  warehouse_id String
+  warehouse_id Int
   note         String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  created_by   String
+  created_by   String   @db.Uuid
 
   Product   Product   @relation(fields: [product_id], references: [id])
   Warehouse Warehouse @relation(fields: [warehouse_id], references: [id])
@@ -123,7 +126,7 @@ model Inventory {
 }
 
 model Warehouse {
-  id          String   @id @default(uuid())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
   status      Boolean  @default(true)
@@ -136,19 +139,19 @@ model Warehouse {
 }
 
 model ProductImage {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   image     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  product_id String
+  product_id Int
   Product    Product @relation(fields: [product_id], references: [id])
 
   @@map("product_images")
 }
 
 model Role {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @db.Uuid
   name        String   @unique
   description String?
   createdAt   DateTime @default(now())

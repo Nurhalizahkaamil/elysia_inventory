@@ -14,7 +14,7 @@ async function getCategories() {
     });
 }
 
-async function getCategoryById(id: string) {
+async function getCategoryById(id: number) {
     return await db.category.findFirstOrThrow({
         where: { id },
         select: {
@@ -34,15 +34,12 @@ async function createCategory(data: AddCategoryDto) {
             name: data.name,
             description: data.description,
             status: data.status,
-            // Pastikan field timestamps sesuai dengan schema database
-            createdAt: data.createdAt,  // Nama field di DTO dan database harus konsisten
-            updatedAt: data.updatedAt,
+            // Jangan set createdAt dan updatedAt jika Prisma mengatur field ini secara otomatis
         },
     });
 }
 
-async function updateCategoryById(id: string, data: UpdateCategoryDto) {
-    // Tambahkan pengelolaan updatedAt di sini
+async function updateCategoryById(id: number, data: UpdateCategoryDto) {
     return await db.category.update({
         where: { id },
         data: {
@@ -52,7 +49,7 @@ async function updateCategoryById(id: string, data: UpdateCategoryDto) {
     });
 }
 
-async function deleteCategoryById(id: string) {
+async function deleteCategoryById(id: number) {
     return await db.category.delete({
         where: { id },
     });

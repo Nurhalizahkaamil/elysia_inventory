@@ -11,7 +11,7 @@ export class SuppliersHandler {
         }
     }
 
-    static async getById(id: string) {
+    static async getById(id: number) {
         try {
             const supplier = await SuppliersRepository.getSupplierById(id);
             if (!supplier) {
@@ -39,7 +39,7 @@ export class SuppliersHandler {
         }    
     }
 
-    static async updateById(id: string, updateData: UpdateSupplierDto) {
+    static async updateById(id: number, updateData: UpdateSupplierDto) {
         try {
             const existingSupplier = await SuppliersRepository.getSupplierById(id);
             if (!existingSupplier) {
@@ -57,7 +57,7 @@ export class SuppliersHandler {
         }
     }
 
-    static async deleteById(id: string) {
+    static async deleteById(id: number) {
         try {
             await SuppliersRepository.deleteSupplierById(id);
             return { success: true, message: "Supplier deleted successfully" };
