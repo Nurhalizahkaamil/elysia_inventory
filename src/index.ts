@@ -9,6 +9,9 @@ import { swaggerConfig } from "./config/swagger/swaggerConfig";
 import { productsRoutes } from "./routes/product";
 import { categoriesRoutes } from "./routes/categories";
 import { suppliersRoutes } from "./routes/suppliers";
+import { transactionsRoutes } from "./routes/transaction";
+import { warehousesRoutes } from "./routes/warehouse";
+import { inventoriesRoutes } from "./routes/inventories";
 
 interface TokenPayload {
   sub: string;
@@ -25,6 +28,9 @@ app
   .use(productsRoutes)
   .use(categoriesRoutes)
   .use(suppliersRoutes)
+  .use(transactionsRoutes)
+  .use(warehousesRoutes)
+  .use(inventoriesRoutes)
   .use(authRoutes)
   .guard(async (context: { headers: any; request: any; }) => {
     const { headers, request } = context;

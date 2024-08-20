@@ -97,7 +97,7 @@ model Transaction {
   id               Int      @id @default(autoincrement())
   product_id       Int
   quantity         Int
-  total_price      Decimal
+  total_price      Decimal  @db.Decimal(10, 2)
   transaction_date DateTime @default(now())
   user_id          String   @db.Uuid
   User             User     @relation(fields: [user_id], references: [id])
