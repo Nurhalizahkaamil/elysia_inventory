@@ -14,7 +14,7 @@ async function getCategories() {
     });
 }
 
-async function getCategoryById(id: number) {
+async function getCategoryById(id: string) {
     return await db.category.findFirstOrThrow({
         where: { id },
         select: {
@@ -41,7 +41,7 @@ async function createCategory(data: AddCategoryDto) {
     });
 }
 
-async function updateCategoryById(id: number, data: UpdateCategoryDto) {
+async function updateCategoryById(id: string, data: UpdateCategoryDto) {
     // Tambahkan pengelolaan updatedAt di sini
     return await db.category.update({
         where: { id },
@@ -52,7 +52,7 @@ async function updateCategoryById(id: number, data: UpdateCategoryDto) {
     });
 }
 
-async function deleteCategoryById(id: number) {
+async function deleteCategoryById(id: string) {
     return await db.category.delete({
         where: { id },
     });

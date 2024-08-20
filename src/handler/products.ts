@@ -10,7 +10,7 @@ async function getAll() {
     }
 }
 
-async function getById(id: number) {
+async function getById(id: string) {
     try {
         const product = await ProductsRepository.getProductById(id);
         if (!product) {
@@ -31,7 +31,7 @@ async function create(product: AddProductDto) {
     }
 }
 
-async function updateById(id: number, updateData: UpdateProductDto) {
+async function updateById(id: string, updateData: UpdateProductDto) {
     try {
         const existingProduct = await ProductsRepository.getProductById(id);
         if (!existingProduct) {
@@ -45,7 +45,7 @@ async function updateById(id: number, updateData: UpdateProductDto) {
     }
 }
 
-async function deleteById(id: number) {
+async function deleteById(id: string) {
     try {
         await ProductsRepository.deleteProductById(id);
         return { success: true, message: 'Product deleted successfully' };

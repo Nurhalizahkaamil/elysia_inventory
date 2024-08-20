@@ -20,8 +20,8 @@ export const usersRoutes = (elysia: Elysia) => (
     }),
 
     app.get("/users/:id", async (req) => {
-      const { id } = req.params;
-      const response = await UsersHandler.getById(parseInt(id));
+      const { id } = req.params; // id sekarang dianggap string, tidak perlu parseInt
+      const response = await UsersHandler.getById(id);
       return new Response(JSON.stringify(response), {
         status: response.success ? 200 : 404,
         headers: { 'Content-Type': 'application/json' }
@@ -55,8 +55,8 @@ export const usersRoutes = (elysia: Elysia) => (
     ),
 
     app.delete("/users/:id", async (req) => {
-      const { id } = req.params;
-      const response = await UsersHandler.deleteById(parseInt(id));
+      const { id } = req.params; // id sekarang dianggap string, tidak perlu parseInt
+      const response = await UsersHandler.deleteById(id);
       return new Response(JSON.stringify(response), {
         status: response.success ? 204 : 400,
         headers: { 'Content-Type': 'application/json' }

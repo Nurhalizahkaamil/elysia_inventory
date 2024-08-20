@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { SuppliersHandler } from '../handler/suppliers'; // Ensure this path is correct
+import { SuppliersHandler } from '../handler/suppliers'; // Pastikan path ini benar
 import type { AddSupplierDto, UpdateSupplierDto } from '../dtos/suppliers';
 
 export const suppliersRoutes = (app: Elysia) => (
@@ -11,7 +11,7 @@ export const suppliersRoutes = (app: Elysia) => (
     }),
 
     app.get('/api/suppliers/:id', async ({ params }) => {
-        const supplierId = parseInt(params.id, 10); // Ensure radix is provided
+        const supplierId = params.id; // UUID adalah string, tidak perlu parseInt
         const result = await SuppliersHandler.getById(supplierId);
         return result.success
             ? { status: 200, body: JSON.stringify(result.data) }
@@ -35,7 +35,7 @@ export const suppliersRoutes = (app: Elysia) => (
     }),
 
     app.put('/api/suppliers/:id', async ({ params, body }) => {
-        const supplierId = parseInt(params.id, 10); // Ensure radix is provided
+        const supplierId = params.id; // UUID adalah string, tidak perlu parseInt
         const supplierData = body as UpdateSupplierDto;
         const result = await SuppliersHandler.updateById(supplierId, supplierData);
         return result.success
@@ -43,17 +43,17 @@ export const suppliersRoutes = (app: Elysia) => (
             : { status: 500, body: JSON.stringify({ message: result.message, error: result.error }) };
     }, {
         params: t.Object({
-            id: t.String(), // Adjust to String if supplierId is a string
+            id: t.String(), // Pastikan tipe id adalah string sesuai dengan UUID
         }),
         body: t.Object({
-            name: t.String(),
-            contact: t.String(),
-            address: t.String(),
+            name: t.Optional(t.String()),
+            contact: t.Optional(t.String()),
+            address: t.Optional(t.String()),
         })
     }),
 
     app.delete('/api/suppliers/:id', async ({ params }) => {
-        const supplierId = parseInt(params.id, 10); // Ensure radix is provided
+        const supplierId = params.id; // UUID adalah string, tidak perlu parseInt
         const result = await SuppliersHandler.deleteById(supplierId);
         return result.success
             ? { status: 200, body: JSON.stringify({ message: result.message }) }

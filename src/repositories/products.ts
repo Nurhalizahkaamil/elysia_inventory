@@ -16,7 +16,7 @@ async function getProducts() {
     });
 }
 
-async function getProductById(id: number) {
+async function getProductById(id: string) {
     return await db.product.findFirstOrThrow({
         where: { id },
         select: {
@@ -46,14 +46,14 @@ async function createProduct(data: AddProductDto) {
     });
 }
 
-async function updateProductById(id: number, data: UpdateProductDto) {
+async function updateProductById(id: string, data: UpdateProductDto) {
     return await db.product.update({
         where: { id },
         data,
     });
 }
 
-async function deleteProductById(id: number) {
+async function deleteProductById(id: string) {
     return await db.product.delete({
         where: { id },
     });

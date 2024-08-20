@@ -4,8 +4,8 @@ export type AddProductDto = {
   price: number;
   expiry_date: Date;
   status: string;
-  category_id: number;
-  supplier_id: number;
+  category_id: string;
+  supplier_id: string;
 
 };
 

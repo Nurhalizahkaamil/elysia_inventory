@@ -14,7 +14,7 @@ async function getSuppliers() {
     });
 }
 
-async function getSupplierById(id: number) {
+async function getSupplierById(id: string) {
     return await db.supplier.findFirstOrThrow({
         where: { id },
         select: {
@@ -40,7 +40,7 @@ async function createSupplier(supplier: AddSupplierDto) {
     });
 }
 
-async function updateSupplierById(id: number, supplier: UpdateSupplierDto) {
+async function updateSupplierById(id: string, supplier: UpdateSupplierDto) {
     return await db.supplier.update({
         where: { id },
         data: {
@@ -52,7 +52,7 @@ async function updateSupplierById(id: number, supplier: UpdateSupplierDto) {
     });
 }
 
-async function deleteSupplierById(id: number) {
+async function deleteSupplierById(id: string) {
     return await db.supplier.delete({
         where: { id }
     });

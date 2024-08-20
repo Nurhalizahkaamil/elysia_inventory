@@ -10,7 +10,7 @@ async function getAll() {
     }
 }
 
-async function getById(id: number) {
+async function getById(id: string) {
     try {
         const category = await CategoriesRepository.getCategoryById(id);
         if (!category) {
@@ -38,7 +38,7 @@ async function create(category: AddCategoryDto) {
     }
 }
 
-async function updateById(id: number, updateData: UpdateCategoryDto) {
+async function updateById(id: string, updateData: UpdateCategoryDto) {
     try {
         const existingCategory = await CategoriesRepository.getCategoryById(id);
         if (!existingCategory) {
@@ -58,7 +58,7 @@ async function updateById(id: number, updateData: UpdateCategoryDto) {
     }
 }
 
-async function deleteById(id: number) {
+async function deleteById(id: string) {
     try {
         await CategoriesRepository.deleteCategoryById(id);
         return { success: true, message: 'Category deleted successfully' };

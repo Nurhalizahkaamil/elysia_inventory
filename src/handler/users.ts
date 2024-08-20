@@ -11,7 +11,7 @@ async function getAll() {
   }
 }
 
-async function getById(id: number) {
+async function getById(id: string) { // Tipe diubah menjadi string
   try {
     const user = await UsersRepository.getUserById(id);
     if (!user) {
@@ -25,7 +25,7 @@ async function getById(id: number) {
 
 async function create({ password, role, ...rest }: AddUsersDto) {
   try {
-    // Ensure role is valid before proceeding
+    // Pastikan role valid
     if (!role || !Object.values(UserRole).includes(role)) {
       return { success: false, message: 'Invalid role' };
     }
@@ -35,7 +35,7 @@ async function create({ password, role, ...rest }: AddUsersDto) {
     await UsersRepository.createUser({
       ...rest,
       password: hashedPassword,
-      role,  // Include role in the createUser method
+      role,
     });
 
     return { success: true, message: 'User created successfully' };
@@ -44,7 +44,7 @@ async function create({ password, role, ...rest }: AddUsersDto) {
   }
 }
 
-async function deleteById(id: number) {
+async function deleteById(id: string) { // Tipe diubah menjadi string
   try {
     await UsersRepository.deleteUserById(id);
     return { success: true, message: 'User deleted successfully' };

@@ -7,20 +7,20 @@ export const productsRoutes = (app: Elysia) => (
   app.get('/api/products', async () => {
     const result = await ProductsHandler.getAll();
     return result.success
-      ? { status: 200, body: result.data }
-      : { status: 500, body: { message: result.message, error: result.error } };
+      ? { status: 200, body: JSON.stringify(result.data) }
+      : { status: 500, body: JSON.stringify({ message: result.message, error: result.error }) };
   }),
 
   // Get product by ID
   app.get('/api/products/:id', async ({ params }) => {
-    const productId = parseInt(params.id);
+    const productId = params.id; // UUID adalah string, tidak perlu parseInt
     const result = await ProductsHandler.getById(productId);
 
     return result.success
-      ? { status: 200, body: result.data }
+      ? { status: 200, body: JSON.stringify(result.data) }
       : result.message === 'Product not found'
-      ? { status: 404, body: { message: result.message } }
-      : { status: 500, body: { message: result.message, error: result.error } };
+      ? { status: 404, body: JSON.stringify({ message: result.message }) }
+      : { status: 500, body: JSON.stringify({ message: result.message, error: result.error }) };
   }),
 
   // Create a new product
@@ -29,8 +29,8 @@ export const productsRoutes = (app: Elysia) => (
 
     const result = await ProductsHandler.create(productData);
     return result.success
-      ? { status: 201, body: { message: result.message } }
-      : { status: 500, body: { message: result.message, error: result.error } };
+      ? { status: 201, body: JSON.stringify({ message: result.message }) }
+      : { status: 500, body: JSON.stringify({ message: result.message, error: result.error }) };
   }, {
     body: t.Object({
       name: t.String(),
@@ -38,22 +38,22 @@ export const productsRoutes = (app: Elysia) => (
       price: t.Number(),
       expiry_date: t.Date(),
       status: t.String(),
-      category_id: t.Number(),
-      supplier_id: t.Number(),
+      category_id: t.String(), // Ubah ke String jika UUID
+      supplier_id: t.String(), // Ubah ke String jika UUID
     })
   }),
 
   // Update a product by ID
   app.put('/api/products/:id', async ({ params, body }) => {
-    const productId = parseInt(params.id);
+    const productId = params.id; // UUID adalah string, tidak perlu parseInt
     const updateData = body as UpdateProductDto;
 
     const result = await ProductsHandler.updateById(productId, updateData);
     return result.success
-      ? { status: 200, body: { message: result.message } }
+      ? { status: 200, body: JSON.stringify({ message: result.message }) }
       : result.message === 'Product not found'
-      ? { status: 404, body: { message: result.message } }
-      : { status: 500, body: { message: result.message, error: result.error } };
+      ? { status: 404, body: JSON.stringify({ message: result.message }) }
+      : { status: 500, body: JSON.stringify({ message: result.message, error: result.error }) };
   }, {
     body: t.Object({
       name: t.Optional(t.String()),
@@ -61,18 +61,18 @@ export const productsRoutes = (app: Elysia) => (
       price: t.Optional(t.Number()),
       expiry_date: t.Optional(t.Date()),
       status: t.Optional(t.String()),
-      category_id: t.Optional(t.Number()),
-      supplier_id: t.Optional(t.Number()),
+      category_id: t.Optional(t.String()), // Ubah ke String jika UUID
+      supplier_id: t.Optional(t.String()), // Ubah ke String jika UUID
     })
   }),
 
   // Delete a product by ID
   app.delete('/api/products/:id', async ({ params }) => {
-    const productId = parseInt(params.id);
+    const productId = params.id; // UUID adalah string, tidak perlu parseInt
 
     const result = await ProductsHandler.deleteById(productId);
     return result.success
-      ? { status: 200, body: { message: result.message } }
-      : { status: 500, body: { message: result.message, error: result.error } };
+      ? { status: 200, body: JSON.stringify({ message: result.message }) }
+      : { status: 500, body: JSON.stringify({ message: result.message, error: result.error }) };
   })
 );

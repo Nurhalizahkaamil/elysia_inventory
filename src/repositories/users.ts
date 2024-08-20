@@ -14,7 +14,7 @@ async function getUsers() {
   return users;
 }
 
-async function getUserById(id: number) {
+async function getUserById(id: string) {
   const user = await db.user.findFirstOrThrow({
     where: {
       id,
@@ -46,7 +46,7 @@ async function createUser(data: AddUsersDto) {
   });
 }
 
-async function deleteUserById(id: number) {
+async function deleteUserById(id: string) {
   return await db.user.delete({
     where: {
       id,
